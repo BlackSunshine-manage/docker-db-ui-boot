@@ -1,0 +1,1 @@
+StandartEmployeeService будет взаимодействовать с StandartEmployeeCache который будет синхронизировать данные с БД
