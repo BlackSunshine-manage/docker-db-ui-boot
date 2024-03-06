@@ -9,10 +9,16 @@
   <table class="datatable">
     <tr>
       <th>Id</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Age</th>
     </tr>
     <#list model["employeeList"] as employee>
       <tr>
         <td>${employee.id}</td>
+        <td>${employee.profile.firstName}</td>
+        <td>${employee.profile.surname}</td>
+        <td>${employee.profile.age}</td>
       </tr>
     </#list>
   </table>

@@ -12,10 +12,14 @@ public class EmployeeMapper {
     }
 
     StandartEmployee mapToBusiness() {
-        return new StandartEmployee(this.employee.getId());
+        return new StandartEmployee(this.employee.getId(), this.employee.getProfile());
     }
 
     EmployeeDto mapToDto() {
-        return new EmployeeDto(this.employee.getId());
+        var employeeProfile = this.employee.getProfile();
+        var profile = new ProfileDto(employeeProfile.getFirstName(),
+                employeeProfile.getSurname(),
+                employeeProfile.getAge());
+        return new EmployeeDto(this.employee.getId(), profile);
     }
 }

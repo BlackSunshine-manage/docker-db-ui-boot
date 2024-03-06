@@ -10,16 +10,16 @@ public class StandartProfile implements Profile {
     private final int age;
     @Override
     public String getFirstName() {
-        return null;
+        return firstName;
     }
 
     @Override
     public String getSurname() {
-        return null;
+        return surname;
     }
 
     @Override
     public int getAge() {
-        return 0;
+        return age;
     }
 }
