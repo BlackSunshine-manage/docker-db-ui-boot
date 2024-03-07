@@ -8,11 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-
-/**
- * @author snd00 created at 01.03.2024
- * @project backend
- */
 @Getter
 @Setter
 @Entity

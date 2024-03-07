@@ -3,8 +3,6 @@ package com.company.project.employes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
 @AllArgsConstructor
 public class ProfileDto implements Profile {
