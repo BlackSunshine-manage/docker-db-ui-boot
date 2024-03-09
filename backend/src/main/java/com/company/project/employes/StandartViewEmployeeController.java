@@ -24,9 +24,6 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
     public String showAllEmployees(String name, @ModelAttribute("model") ModelMap model) {
         ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees();
         model = model.addAttribute("employeeList", response.getBody());
-//                List.of(new StandartEmployee(0,
-//                        new StandartProfile("Ivan", "Pervopechatnik", 28)),
-//                new StandartEmployee(1, new StandartProfile("Ivan", "Fedorov", 27))));
         return "employees";
     }
 }
