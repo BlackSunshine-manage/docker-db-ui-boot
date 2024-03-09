@@ -1,7 +1,9 @@
 package com.company.project.employes;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class StandartProfile implements Profile {
     private final String firstName;

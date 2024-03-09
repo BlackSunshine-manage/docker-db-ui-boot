@@ -3,6 +3,7 @@ package com.company.project.employes;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -14,9 +15,16 @@ import java.util.Objects;
 @Table(name = "employee")
 public class EmployeeEntity implements Employee {
     @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "age")
     private short age;
+
+    @Column(name = "firstname")
     private String firstName;
+
+    @Column(name = "surname")
     private String surname;
 
     @Override
