@@ -11,12 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {"com.company.project"})
 public class Application {
-    private static final Logger LOGGER = LogManager.getLogger(Application.class);
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        LOGGER.info("Info level log message");
-        LOGGER.debug("Debug level log message");
-        LOGGER.error("Error level log message");
+        new LoggerStarter(LogManager.getLogger(Application.class));
     }
 }
