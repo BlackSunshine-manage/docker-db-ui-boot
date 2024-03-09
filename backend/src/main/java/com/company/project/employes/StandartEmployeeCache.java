@@ -1,6 +1,7 @@
 package com.company.project.employes;
 
 import com.company.project.utils.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,11 @@ import java.util.function.Predicate;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @Component
-public class StandartEmployeeCache implements EmployeeService {
-    private volatile Set<Employee> employees = new ConcurrentSkipListSet<>();
-    private volatile Set<Employee> bypass = new ConcurrentSkipListSet<>();
-    private EmployeeRepository employeeRepository;
+@RequiredArgsConstructor
+public abstract class StandartEmployeeCache implements EmployeeService {
+    protected volatile Set<Employee> employees = new ConcurrentSkipListSet<>();
+    protected volatile Set<Employee> bypass = new ConcurrentSkipListSet<>();
+    protected final EmployeeRepository employeeRepository;
 
     public void supplyEmployees(Consumer<List<Employee>> usedEmployees) {
         new CollectionNotEmpty<>(employees,
@@ -34,7 +36,7 @@ public class StandartEmployeeCache implements EmployeeService {
     @Override
     public void deleteEmployees(List<Employee> deletedEmployees) {
         new CollectionNotEmpty<>(employees,
-                () -> employees.removeAll(deletedEmployees));
+                () -> deletedEmployees.forEach(employees::remove));
     }
 
     public synchronized void putEmployee(Employee employee, AtomicReference<ResponseEntity<Employee>> response) {
@@ -49,13 +51,5 @@ public class StandartEmployeeCache implements EmployeeService {
                 new CollectionAnyMatchByPredicate<>(employees, filterById, actionOnUpdate));
     }
 
-    private void timedUpdateDataBase() {
-        new CollectionsNotEquivalence<>(employees, bypass, () -> {
-            bypass = new ConcurrentSkipListSet<>(employees);
-            employees.stream()
-                    .map(EmployeeMapper::new)
-                    .map(EmployeeMapper::mapToEntity)
-                    .forEach(employee -> employeeRepository.save(employee));
-        });
-    }
+    protected abstract void updateDataBase();
 }

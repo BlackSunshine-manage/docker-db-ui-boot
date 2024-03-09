@@ -4,5 +4,8 @@ CREATE TABLE IF NOT EXISTS GREETINGS (
 );
 
 CREATE TABLE IF NOT EXISTS employee (
-    id serial PRIMARY KEY
+    id serial PRIMARY KEY,
+    firstName varchar(50) NOT NULL,
+    surname varchar(50) NOT NULL,
+    age smallint
 );

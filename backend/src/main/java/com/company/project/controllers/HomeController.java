@@ -19,5 +19,4 @@ public class HomeController {
         model = model.addAttribute("name", dockerGreeting.getName());
         return "home";
     }
-
 }

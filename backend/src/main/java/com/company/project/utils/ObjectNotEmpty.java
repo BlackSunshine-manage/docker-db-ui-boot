@@ -11,6 +11,10 @@ public class ObjectNotEmpty <O> implements Predicative {
         if (test()) actionWhenCollectionNotEmpty.action();
     }
 
+    public ObjectNotEmpty(O objectToVerification) {
+        this.objectToVerification = objectToVerification;
+    }
+
     public boolean test() {
         return nonNull(objectToVerification);
     }

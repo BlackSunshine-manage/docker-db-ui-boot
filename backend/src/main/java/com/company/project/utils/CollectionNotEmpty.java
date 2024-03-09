@@ -13,6 +13,6 @@ public class CollectionNotEmpty<I, C extends Collection<I>> implements Predicati
     }
 
     public boolean test() {
-        return nonNull(collectionToVerification) && collectionToVerification.isEmpty();
+        return nonNull(collectionToVerification) && !collectionToVerification.isEmpty();
     }
 }

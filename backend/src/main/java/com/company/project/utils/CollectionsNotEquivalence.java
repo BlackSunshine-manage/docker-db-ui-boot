@@ -2,10 +2,6 @@ package com.company.project.utils;
 
 import java.util.Collection;
 
-/**
- * @author snd00 created at 29.02.2024
- * @project backend
- */
 public class CollectionsNotEquivalence<I, C extends Collection<I>> implements Predicative {
     private final C firstCollectionToVerification;
     private final C secondCollectionToVerification;

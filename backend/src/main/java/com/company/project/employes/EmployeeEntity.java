@@ -1,20 +1,36 @@
 package com.company.project.employes;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-
-/**
- * @author snd00 created at 01.03.2024
- * @project backend
- */
+@Getter
+@Setter
 @Entity
 @Table(name = "employee")
 public class EmployeeEntity implements Employee {
     @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "age")
+    private short age;
+
+    @Column(name = "firstname")
+    private String firstName;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Override
+    public Profile getProfile() {
+        return new StandartProfile(firstName, surname, age);
+    }
 
     public EmployeeEntity(int id) {
         this.id = id;
@@ -23,20 +39,10 @@ public class EmployeeEntity implements Employee {
     public EmployeeEntity() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        com.company.project.entity.Greeting greeting = (com.company.project.entity.Greeting) o;
 
         return id == id;
     }
