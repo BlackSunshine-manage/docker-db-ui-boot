@@ -1,7 +1,6 @@
 package com.company.project.employes;
 
 import com.company.project.utils.ObjectIsEmpty;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -25,11 +24,11 @@ public class StandartEmployee implements Employee {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StandartEmployee)) return false;
-        StandartEmployee that = (StandartEmployee) o;
-        return profile.equals(that.profile);
+    public boolean equals(Object employee) {
+        if (this == employee) return true;
+        if (!(employee instanceof Employee)) return false;
+        Employee that = (Employee) employee;
+        return profile.equals(that.getProfile());
     }
 
     @Override
