@@ -14,4 +14,6 @@ public interface EmployeeService {
     void deleteEmployees(List<Employee> puttedEmployees);
 
     void putEmployee(Employee employee, AtomicReference<ResponseEntity<Employee>> response);
+
+    void supplyEmployees(Consumer<List<Employee>> usedEmployees, Integer ... employeeIds);
 }

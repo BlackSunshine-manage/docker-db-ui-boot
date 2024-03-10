@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class EmployeeDto implements Employee {
-    private int id;
+    private Integer id;
     private ProfileDto profile;
 
     @Override

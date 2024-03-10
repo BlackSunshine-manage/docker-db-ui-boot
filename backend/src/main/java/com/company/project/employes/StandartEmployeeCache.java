@@ -27,6 +27,13 @@ public abstract class StandartEmployeeCache implements EmployeeService {
                 () -> usedEmployees.accept(new ArrayList<>(employees)));
     }
 
+    public void supplyEmployees(Consumer<List<Employee>> usedEmployees, Integer ... employeeIds) {
+        final List<Integer> ids = List.of(employeeIds);
+        new CollectionNotEmpty<>(employees,
+                () -> new CollectionNotEmpty<>(ids,
+                        () -> usedEmployees.accept(new ArrayList<>(employees))));
+    }
+
     @Override
     public synchronized void addEmployees(List<Employee> puttedEmployees) {
         new CollectionNotEmpty<>(employees,

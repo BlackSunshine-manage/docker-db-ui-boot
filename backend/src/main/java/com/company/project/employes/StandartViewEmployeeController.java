@@ -1,6 +1,7 @@
 package com.company.project.employes;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/api/v2/employees")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -29,19 +31,41 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
 
     @GetMapping(value = {"/add"})
     public String showAddEmployee(Model model) {
-        return "";
+        EmployeeDto employee = new EmployeeDto(null, new ProfileDto("", "", 0));
+        model = model.addAttribute("add", true);
+        model = model.addAttribute("employee", employee);
+        return "note-edit";
     }
 
     @PostMapping(value = "/add")
     public String addEmployee(Model model,
                               @ModelAttribute("employee") EmployeeDto employee) {
-        return "";
+        try {
+            Employee newEmployee = new EmployeeMapper(employee).mapToEntity();
+            standartEmployeeController.pushEmployees(newEmployee);
+            return "redirect:/notes/" + newEmployee.getId();
+        } catch (Exception exception) {
+            String errorMessage = exception.getMessage();
+            log.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("add", true);
+            return "note-edit";
+        }
     }
 
     @GetMapping(value = {"/{employeeId}/edit"})
     public String showEditEmployee(Model model,
                                    @PathVariable long employeeId) {
-        return "";
+        EmployeeDto employee = null;
+        try {
+            ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees((int) employeeId);
+            employee = new EmployeeMapper(response.getBody().get(0)).mapToDto();
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+        }
+        model.addAttribute("add", false);
+        model.addAttribute("employee", employee);
+        return "note-edit";
     }
 
     @PostMapping(value = {"/{employeeId}/edit"})

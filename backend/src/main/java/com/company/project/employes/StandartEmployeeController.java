@@ -53,4 +53,13 @@ public class StandartEmployeeController implements EmployeeController {
         standartEmployeeService.deleteEmployees(List.of(employees));
         return response.get();
     }
+
+    @Override
+    @GetMapping
+    //200 - if true
+    public ResponseEntity<List<Employee>> getEmployees(Integer ... employeeIds) {
+        AtomicReference<ResponseEntity<List<Employee>>> response = new AtomicReference<>(ok().build());
+        standartEmployeeService.supplyEmployees((employees -> response.set(ok(employees))), employeeIds);
+        return response.get();
+    }
 }

@@ -12,4 +12,6 @@ public interface EmployeeController {
     ResponseEntity<Employee> deleteEmployee(Employee ... employees);
 
     ResponseEntity<Employee> putEmployee(Employee employee);
+
+    ResponseEntity<List<Employee>> getEmployees(Integer ... employeeIds);
 }
