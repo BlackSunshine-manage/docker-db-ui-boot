@@ -1,26 +1,38 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" type="text/css" href="/css/styles.css"/>
 <div id="header">
   <h2>Procedure adding new employee ~</h2>
 </div>
+</head>
+<body>
 <div id="content">
+  <div>
+       <nobr>
+              <a href="/notes/add">Add new Employee</a>
+       </nobr>
+  </div>
   <br/>
-  <table class="datatable">
+  <table class="datatable" id="datatable">
     <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Surname</th>
-      <th>Age</th>
+      <th class=datatable-column>Id</th>
+      <th class=datatable-column>Name</th>
+      <th class=datatable-column>Surname</th>
+      <th class=datatable-column>Age</th>
+      <th class=datatable-column>Manage record</th>
     </tr>
     <#list model["employeeList"] as employee>
       <tr>
-        <td>${employee.id}</td>
-        <td>${employee.profile.firstName}</td>
-        <td>${employee.profile.surname}</td>
-        <td>${employee.profile.age}</td>
+        <td class=datatable-row>${employee.id}</td>
+        <td class=datatable-row>${employee.profile.firstName}</td>
+        <td class=datatable-row>${employee.profile.surname}</td>
+        <td class=datatable-row>${employee.profile.age}</td>
+        <td class=datatable-row><a href="${'employee/' + employee.id + '/edit'}">Edit</a> ▒║▒ <a href="${'employee/' + employee.id + '/delete'}">Delete</a> </td>
       </tr>
     </#list>
   </table>
 </div>
-</head>
+</body>
+</html>
