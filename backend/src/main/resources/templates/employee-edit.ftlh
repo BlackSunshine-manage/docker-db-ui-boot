@@ -3,7 +3,10 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title><#if add>Create a Note<#else>Edit a Note</#if></title>
+          <title>
+            <#if add>Create a Note
+            <#else>Edit a Note</#if>
+          </title>
         <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     </head>
 
@@ -12,7 +15,7 @@
           <#if add>Create a Employee:
           <#else>Edit a Employee:</#if>
         </h1>
-        <a href="/api/v2/employees">Back to Employees List</a>
+        <a href="/api/v2/employees/all">Back to Employees List</a>
         <br/><br/>
         <#if add>
             <#assign urlAction>/api/v2/employees/add</#assign>
@@ -38,12 +41,12 @@
                 <tr>
                     <td>Surname</td>
                     <td>:</td>
-                    <td><textarea name="surname" rows="4" cols="50">${(employee.profile.surname)!""}</textarea></td>
+                    <td><input type="text" name="surname" value="${(employee.profile.surname)!''}" /></td>
                 </tr>
                 <tr>
                      <td>Age</td>
                      <td>:</td>
-                     <td><textarea name="age" rows="4" cols="50">${(employee.profile.age)!""}</textarea></td>
+                     <td><input type="text" name="age" value="${(employee.profile.age)!''}" /></td>
                 </tr>
             </table>
             <input type="submit" value="${submitTitle}" />

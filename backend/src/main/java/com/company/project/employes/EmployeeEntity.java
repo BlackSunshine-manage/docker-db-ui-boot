@@ -16,7 +16,7 @@ import java.util.Objects;
 public class EmployeeEntity implements Employee {
     @Id
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "age")
     private short age;

@@ -55,9 +55,9 @@ public class StandartEmployeeController implements EmployeeController {
     }
 
     @Override
-    @GetMapping
+    @GetMapping("/criteria-filter")
     //200 - if true
-    public ResponseEntity<List<Employee>> getEmployees(Integer ... employeeIds) {
+    public ResponseEntity<List<Employee>> getEmployees(@RequestParam(value = "ids", required=true) Integer ... employeeIds) {
         AtomicReference<ResponseEntity<List<Employee>>> response = new AtomicReference<>(ok().build());
         standartEmployeeService.supplyEmployees((employees -> response.set(ok(employees))), employeeIds);
         return response.get();

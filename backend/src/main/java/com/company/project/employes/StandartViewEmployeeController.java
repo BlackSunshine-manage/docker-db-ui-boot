@@ -20,7 +20,7 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
     private final EmployeeController standartEmployeeController;
 
     //        @Override
-    @GetMapping("/")
+    @GetMapping("/all")
     //200 - if true
     public String showAllEmployees(String name,
                                    @ModelAttribute("model") ModelMap model) {
@@ -29,12 +29,12 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
         return "employees";
     }
 
-    @GetMapping(value = {"/add"})
+    @GetMapping(value = "/add")
     public String showAddEmployee(Model model) {
         EmployeeDto employee = new EmployeeDto(null, new ProfileDto("", "", 0));
         model = model.addAttribute("add", true);
         model = model.addAttribute("employee", employee);
-        return "note-edit";
+        return "employee-edit";
     }
 
     @PostMapping(value = "/add")
@@ -43,13 +43,13 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
         try {
             Employee newEmployee = new EmployeeMapper(employee).mapToEntity();
             standartEmployeeController.pushEmployees(newEmployee);
-            return "redirect:/notes/" + newEmployee.getId();
+            return "redirect:/api/v2/employees/" + newEmployee.getId();
         } catch (Exception exception) {
             String errorMessage = exception.getMessage();
             log.error(errorMessage);
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("add", true);
-            return "note-edit";
+            return "employee-edit";
         }
     }
 
@@ -65,22 +65,32 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
         }
         model.addAttribute("add", false);
         model.addAttribute("employee", employee);
-        return "note-edit";
+        return "employee-edit";
     }
 
     @PostMapping(value = {"/{employeeId}/edit"})
     public String updateEmployee(Model model,
-                             @PathVariable long employeeId,
+                             @PathVariable Integer employeeId,
                              @ModelAttribute("employee") EmployeeDto employee) {
-        return "";
+        try {
+            employee.setId(employeeId);
+            standartEmployeeController.putEmployee(employee);
+            return "redirect:/api/v2/employees/" + employee.getId();
+        } catch (Exception ex) {
+            String errorMessage = ex.getMessage();
+            log.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("add", false);
+            return "employee-edit";
+        }
     }
-
-    @GetMapping(value = {"/{employeeId}/delete"})
-    public String showDeleteEmployeeById(Model model,
-                                         @PathVariable long employeeId) {
-        return "";
-    }
-
+//
+//    @GetMapping(value = {"/{employeeId}/delete"})
+//    public String showDeleteEmployeeById(Model model,
+//                                         @PathVariable long employeeId) {
+//        return "";
+//    }
+//
     @PostMapping(value = {"/{employeeId}/delete"})
     public String deleteEmployeeById(Model model,
                                      @PathVariable long employeeId) {

@@ -11,7 +11,7 @@
 <div id="content">
   <div>
        <nobr>
-              <a href="/notes/add">Add new Employee</a>
+              <a href="/api/v2/employees/add">Add new Employee</a>
        </nobr>
   </div>
   <br/>
@@ -29,7 +29,12 @@
         <td class=datatable-row>${employee.profile.firstName}</td>
         <td class=datatable-row>${employee.profile.surname}</td>
         <td class=datatable-row>${employee.profile.age}</td>
-        <td class=datatable-row><a href="${'employee/' + employee.id + '/edit'}">Edit</a> ▒║▒ <a href="${'employee/' + employee.id + '/delete'}">Delete</a> </td>
+        <td class=datatable-row>
+             <form action="" method="delete">
+                 <input type="submit" name="upvote" value="Upvote" />
+             </form>
+        <a href="${'/api/v2/employees/' + employee.id + '/edit'}">Edit</a> ▒║▒
+        <a href="${'/api/v2/employees/' + employee.id + '/delete'}">Delete</a> </td>
       </tr>
     </#list>
   </table>

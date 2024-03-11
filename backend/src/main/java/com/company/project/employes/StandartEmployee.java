@@ -16,6 +16,10 @@ public class StandartEmployee implements Employee {
         this.profile = new StandartProfile(profile.getFirstName(), profile.getSurname(), profile.getAge());
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     @Override
     public int compareTo(Employee employee) {
         if (new ObjectIsEmpty<>(employee).test()) return -1;

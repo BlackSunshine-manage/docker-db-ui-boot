@@ -31,4 +31,9 @@ class StandartEmployeeService implements EmployeeService {
     public synchronized void putEmployee(Employee employee, AtomicReference<ResponseEntity<Employee>> response) {
         timeSynchronizedEmployeeCache.putEmployee(employee, response);
     }
+
+    @Override
+    public void supplyEmployees(Consumer<List<Employee>> usedEmployees, Integer... employeeIds) {
+        timeSynchronizedEmployeeCache.supplyEmployees(usedEmployees, employeeIds);
+    }
 }
