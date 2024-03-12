@@ -25,8 +25,7 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
     //        @Override
     @GetMapping("/all")
     //200 - if true
-    public String showAllEmployees(String name,
-                                   @ModelAttribute("model") ModelMap model) {
+    public String showAllEmployees(@ModelAttribute("model") ModelMap model) {
         ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees();
         model = model.addAttribute("employeeList", response.getBody());
         return "employees";
@@ -88,11 +87,12 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
         }
     }
 //
-//    @GetMapping(value = {"/{employeeId}/delete"})
-//    public String showDeleteEmployeeById(Model model,
-//                                         @PathVariable long employeeId) {
-//        return "";
-//    }
+    @GetMapping(value = {"/{employeeId}/delete"})
+    public String showDeleteEmployeeById(Model model,
+                                         @PathVariable long employeeId) {
+        model = model.addAttribute("employeeList", standartEmployeeController.getEmployees().getBody());
+        return "employees";
+    }
 //
     @PostMapping(value = {"/{employeeId}/delete"})
     public String deleteEmployeeById(Model model,
@@ -103,6 +103,7 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
                 () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
                                 () -> standartEmployeeController.deleteEmployee(getBodyFromResponse.get()
                                         .toArray(Employee[]::new))));
-        return "redirect:/api/v2/employees/all/";
+        model = model.addAttribute("employeeList", standartEmployeeController.getEmployees().getBody());
+        return "employees";
     }
 }
