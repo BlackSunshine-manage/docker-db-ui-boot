@@ -1,5 +1,7 @@
 package com.company.project.employes;
 
+import com.company.project.utils.CollectionNotEmpty;
+import com.company.project.utils.ObjectNotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Slf4j
 @Controller
@@ -93,7 +96,13 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
 //
     @PostMapping(value = {"/{employeeId}/delete"})
     public String deleteEmployeeById(Model model,
-                                     @PathVariable long employeeId) {
-        return "";
+                                     @PathVariable Integer employeeId) {
+        ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees(employeeId);
+        Supplier<List<Employee>> getBodyFromResponse = response::getBody;
+        new ObjectNotEmpty<>(response,
+                () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
+                                () -> standartEmployeeController.deleteEmployee(getBodyFromResponse.get()
+                                        .toArray(Employee[]::new))));
+        return "redirect:/api/v2/employees/all/";
     }
 }
