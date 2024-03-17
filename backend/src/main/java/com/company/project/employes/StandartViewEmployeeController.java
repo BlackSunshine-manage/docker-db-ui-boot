@@ -20,22 +20,22 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StandartViewEmployeeController implements ViewEmployeeController {
 
-    private final EmployeeController standartEmployeeController;
+    private final EmployeeController exceptionCatchedViewEmployeeController;
 
     //        @Override
     @GetMapping("/all")
     //200 - if true
     public String showAllEmployees(@ModelAttribute("model") ModelMap model) {
-        ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees();
+        ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees();
         model = model.addAttribute("employeeList", response.getBody());
         return "employees";
     }
 
     @GetMapping(value = "/add")
     public String showAddEmployee(Model model) {
-        EmployeeDto employee = new EmployeeDto(null, new ProfileDto("", "", 0));
-        model = model.addAttribute("add", true);
-        model = model.addAttribute("employee", employee);
+        EmployeeDto employee = new EmployeeDto(null, new ProfileDto("firstName", "surname", 0));
+        model.addAttribute("add", true);
+        model.addAttribute("employee", employee);
         return "employee-edit";
     }
 
@@ -44,8 +44,8 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
                               @ModelAttribute("employee") EmployeeDto employee) {
         try {
             Employee newEmployee = new EmployeeMapper(employee).mapToEntity();
-            standartEmployeeController.pushEmployees(newEmployee);
-            return "redirect:/api/v2/employees/" + newEmployee.getId();
+            exceptionCatchedViewEmployeeController.pushEmployees(newEmployee);
+            return "redirect:/api/v2/employees/" + newEmployee.getId() + "/show";
         } catch (Exception exception) {
             String errorMessage = exception.getMessage();
             log.error(errorMessage);
@@ -60,7 +60,7 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
                                    @PathVariable long employeeId) {
         EmployeeDto employee = null;
         try {
-            ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees((int) employeeId);
+            ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees((int) employeeId);
             employee = new EmployeeMapper(response.getBody().get(0)).mapToDto();
         } catch (Exception ex) {
             model.addAttribute("errorMessage", ex.getMessage());
@@ -72,12 +72,14 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
 
     @PostMapping(value = {"/{employeeId}/edit"})
     public String updateEmployee(Model model,
-                             @PathVariable Integer employeeId,
-                             @ModelAttribute("employee") EmployeeDto employee) {
+                                 @PathVariable Integer employeeId,
+                                 @ModelAttribute("employee") EmployeeDto employee) {
         try {
             employee.setId(employeeId);
-            standartEmployeeController.putEmployee(employee);
-            return "redirect:/api/v2/employees/" + employee.getId();
+            exceptionCatchedViewEmployeeController.putEmployee(employee);
+            ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees();
+            model = model.addAttribute("employeeList", response.getBody());
+            return "redirect:/api/v2/employees/" + employee.getId() + "/show";
         } catch (Exception ex) {
             String errorMessage = ex.getMessage();
             log.error(errorMessage);
@@ -86,24 +88,48 @@ public class StandartViewEmployeeController implements ViewEmployeeController {
             return "employee-edit";
         }
     }
-//
+
     @GetMapping(value = {"/{employeeId}/delete"})
-    public String showDeleteEmployeeById(Model model,
+    public String showDeleteEmployeeById(@ModelAttribute("model") ModelMap model,
                                          @PathVariable long employeeId) {
-        model = model.addAttribute("employeeList", standartEmployeeController.getEmployees().getBody());
+        model = model.addAttribute("employeeList", exceptionCatchedViewEmployeeController.getEmployees().getBody());
         return "employees";
     }
-//
+
     @PostMapping(value = {"/{employeeId}/delete"})
-    public String deleteEmployeeById(Model model,
+    public String deleteEmployeeById(@ModelAttribute("model") ModelMap model,
                                      @PathVariable Integer employeeId) {
-        ResponseEntity<List<Employee>> response = standartEmployeeController.getEmployees(employeeId);
+        ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees(employeeId);
         Supplier<List<Employee>> getBodyFromResponse = response::getBody;
-        new ObjectNotEmpty<>(response,
-                () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
-                                () -> standartEmployeeController.deleteEmployee(getBodyFromResponse.get()
-                                        .toArray(Employee[]::new))));
-        model = model.addAttribute("employeeList", standartEmployeeController.getEmployees().getBody());
-        return "employees";
+        new ObjectNotEmpty<>(employeeId,
+                () -> new ObjectNotEmpty<>(response,
+                        () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
+                                () -> exceptionCatchedViewEmployeeController.deleteEmployee(getBodyFromResponse.get()
+                                        .toArray(Employee[]::new)))));
+        model = model.addAttribute("employeeList", exceptionCatchedViewEmployeeController.getEmployees().getBody());
+        return "redirect:/api/v2/employees/all";
+    }
+
+    @Override
+    @GetMapping(value = "/{employeeId}/show")
+    public String getNoteById(Model model, @PathVariable Integer employeeId) {
+        ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees(employeeId);
+        Supplier<List<Employee>> getBodyFromResponse = response::getBody;
+        Supplier<Employee> firstEmployee = () -> getBodyFromResponse.get()
+                .get(0);
+        Model[] models = new Model[] {model};
+        try {
+            new ObjectNotEmpty<>(employeeId,
+                    () -> new ObjectNotEmpty<>(response,
+                            () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
+                                    () -> new ObjectNotEmpty<>(firstEmployee.get(),
+                                            () -> models[0].addAttribute("employee", new EmployeeMapper(firstEmployee.get())
+                                                    .mapToDto())))));
+            models[0].addAttribute("allowDelete", false);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            model.addAttribute("errorMessage", ex.getMessage());
+        }
+        return "employee";
     }
 }

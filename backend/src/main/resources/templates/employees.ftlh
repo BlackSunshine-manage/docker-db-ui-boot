@@ -30,12 +30,12 @@
         <td class=datatable-row>${employee.profile.surname}</td>
         <td class=datatable-row>${employee.profile.age}</td>
         <td class=datatable-row>
-             <form action="${'/api/v2/employees/' + employee.id + '/delete'}" method="DELETE">
-                 <input type="submit" name="delete" value="Delete" />
+             <form action="${'/api/v2/employees/' + employee.id + '/delete'}" method="delete">
+                 <input type="submit"/>
              </form>
              ▒║▒
-             <form action="${'/api/v2/employees/' + employee.id + '/edit'}" method="POST">
-                              <input type="submit" name="delete" value="Delete" />
+             <form action="${'/api/v2/employees/' + employee.id + '/edit'}" method="post">
+                 <input type="submit" name="edit" value="Edit" />
              </form>
       </tr>
     </#list>

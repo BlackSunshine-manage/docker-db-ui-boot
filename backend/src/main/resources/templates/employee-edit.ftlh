@@ -36,17 +36,17 @@
                 <tr>
                     <td>First name</td>
                     <td>:</td>
-                    <td><input type="text" name="title" value="${(employee.profile.firstName)!''}" /></td>
+                    <td><input type="text" name="employee.firstName" value="${(employee.firstName)!''}"/></td>
                 </tr>
                 <tr>
                     <td>Surname</td>
                     <td>:</td>
-                    <td><input type="text" name="surname" value="${(employee.profile.surname)!''}" /></td>
+                    <td><input type="text" name="employee.surname" value="${(employee.surname)!''}" /></td>
                 </tr>
                 <tr>
                      <td>Age</td>
                      <td>:</td>
-                     <td><input type="text" name="age" value="${(employee.profile.age)!''}" /></td>
+                     <td><input type="text" name="employee.age" value="${(employee.age)!''}" /></td>
                 </tr>
             </table>
             <input type="submit" value="${submitTitle}" />
