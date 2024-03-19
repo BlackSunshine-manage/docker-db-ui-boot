@@ -6,25 +6,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
+@RequestMapping("/api/v2/employees")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ExceptionCatchedViewEmployeeController implements ViewEmployeeController {
     private final ViewEmployeeController standartViewEmployeeController;
 
     @Override
-    public String showAllEmployees(ModelMap model) {
+    @GetMapping("/all")
+    public String showAllEmployees(@ModelAttribute("model") ModelMap model) {
         return standartViewEmployeeController.showAllEmployees(model);
     }
 
     @Override
+    @GetMapping(value = "/add")
     public String showAddEmployee(Model model) {
         return standartViewEmployeeController.showAddEmployee(model);
     }
 
     @Override
-    public String addEmployee(Model model, EmployeeDto employee) {
+    @PostMapping(value = "/add")
+    public String addEmployee(Model model, @ModelAttribute("employee") EmployeeDto employee) {
         try {
             return standartViewEmployeeController.addEmployee(model, employee);
         } catch (Exception exception) {
@@ -37,7 +42,8 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
     }
 
     @Override
-    public String showEditEmployee(Model model, long employeeId) {
+    @GetMapping(value = {"/{employeeId}/edit"})
+    public String showEditEmployee(Model model, @PathVariable long employeeId) {
         EmployeeDto employee = null;
         try {
 //            ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees((int) employeeId);
@@ -52,7 +58,10 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
     }
 
     @Override
-    public String updateEmployee(Model model, Integer employeeId, EmployeeDto employee) {
+    @PostMapping(value = {"/{employeeId}/edit"})
+    public String updateEmployee(Model model,
+                                 @PathVariable Integer employeeId,
+                                 @ModelAttribute("employee") EmployeeDto employee) {
         try {
 //            employee.setId(employeeId);
 //            exceptionCatchedViewEmployeeController.putEmployee(employee);
@@ -70,7 +79,9 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
     }
 
     @Override
-    public String showDeleteEmployeeById(ModelMap model, long employeeId) {
+    @GetMapping(value = {"/{employeeId}/delete"})
+    public String showDeleteEmployeeById(@ModelAttribute("model") ModelMap model,
+                                         @PathVariable long employeeId) {
         return standartViewEmployeeController.showDeleteEmployeeById(model, employeeId);
     }
 
@@ -80,21 +91,8 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
     }
 
     @Override
-    public String getNoteById(Model model, Integer employeeId) {
-//        ResponseEntity<List<Employee>> response = exceptionCatchedViewEmployeeController.getEmployees(employeeId);
-//        Supplier<List<Employee>> getBodyFromResponse = response::getBody;
-//        Supplier<Employee> firstEmployee = () -> getBodyFromResponse.get()
-//                .get(0);
-//        Model[] models = new Model[]{model};
-//        try {
-//            new ObjectNotEmpty<>(employeeId,
-//                    () -> new ObjectNotEmpty<>(response,
-//                            () -> new CollectionNotEmpty<>(getBodyFromResponse.get(),
-//                                    () -> new ObjectNotEmpty<>(firstEmployee.get(),
-//                                            () -> models[0].addAttribute("employee", new EmployeeMapper(firstEmployee.get())
-//                                                    .mapToDto())))));
-//            models[0].addAttribute("allowDelete", false);
-//        }
+    @GetMapping(value = "/{employeeId}/show")
+    public String getNoteById(Model model, @PathVariable Integer employeeId) {
         try {
             standartViewEmployeeController.getNoteById(model, employeeId);
         } catch (Exception ex) {
