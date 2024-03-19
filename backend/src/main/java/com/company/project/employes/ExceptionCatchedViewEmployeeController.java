@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -38,7 +37,7 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
     }
 
     @Override
-    public String showEditEmployee(Model model, long employeeId) {
+    public String showEditEmployee(Model model, Integer employeeId) {
         EmployeeDto employee = null;
         try {
             return standartViewEmployeeController.showEditEmployee(model, employeeId);
@@ -67,7 +66,7 @@ public class ExceptionCatchedViewEmployeeController implements ViewEmployeeContr
 
     @Override
     public String showDeleteEmployeeById(ModelMap model,
-                                         long employeeId) {
+                                         Integer employeeId) {
         return standartViewEmployeeController.showDeleteEmployeeById(model, employeeId);
     }
 

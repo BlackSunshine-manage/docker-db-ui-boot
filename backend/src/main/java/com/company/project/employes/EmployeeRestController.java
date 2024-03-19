@@ -32,7 +32,7 @@ public class EmployeeRestController implements ViewEmployeeController {
 
     @Override
     @GetMapping(value = {"/{employeeId}/edit"})
-    public String showEditEmployee(Model model, @PathVariable long employeeId) {
+    public String showEditEmployee(Model model, @PathVariable Integer employeeId) {
         return exceptionCatchedViewEmployeeController.showEditEmployee(model, employeeId);
     }
 
@@ -47,12 +47,14 @@ public class EmployeeRestController implements ViewEmployeeController {
     @Override
     @GetMapping(value = {"/{employeeId}/delete"})
     public String showDeleteEmployeeById(@ModelAttribute("model") ModelMap model,
-                                         @PathVariable long employeeId) {
+                                         @PathVariable Integer employeeId) {
         return exceptionCatchedViewEmployeeController.showDeleteEmployeeById(model, employeeId);
     }
 
     @Override
-    public String deleteEmployeeById(ModelMap model, Integer employeeId) {
+    @PostMapping(value = {"/{employeeId}/delete"})
+    public String deleteEmployeeById(@ModelAttribute("model") ModelMap model,
+                                     @PathVariable Integer employeeId) {
         return exceptionCatchedViewEmployeeController.deleteEmployeeById(model, employeeId);
     }
 
